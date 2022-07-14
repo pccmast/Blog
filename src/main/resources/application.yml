@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:33306/blogdata?characterEncoding=utf-8
+    username: root
+    password: lzp123456
+
+server:
+  port: 8088
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml

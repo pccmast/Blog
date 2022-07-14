@@ -1,0 +1,20 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="blog.mapper.UserMapper">
+    <select id="findUserById" resultType="blog.entities.User">
+        select *
+        from users
+        where id = #{id}
+    </select>
+    <select id="findUserByUserName" resultType="blog.entities.User">
+        select *
+        from users
+        where username = #{name}
+    </select>
+    <insert id="registerNewUser" parameterType="blog.entities.User" useGeneratedKeys="true" keyProperty="id">
+        insert into users(username, encryptedPassword, createdAt, updatedAt)
+        values (#{name}, #{encryptedPassword}, #{createdAt}, #{updatedAt})
+    </insert>
+</mapper>
