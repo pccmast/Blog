@@ -1,10 +1,12 @@
 package blog.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AjaxResponse {
     /**
      * 依据接口文档对返回结果的封装
@@ -41,8 +43,8 @@ public class AjaxResponse {
         return ajaxResponse;
     }
 
-    public static AjaxResponse loginFailure() {
-        return AjaxResponse.failure("用户不存在/密码不正确");
+    public static AjaxResponse loginFailure(String msg) {
+        return AjaxResponse.failure(msg);
     }
 
     public static AjaxResponse registryFailure() {

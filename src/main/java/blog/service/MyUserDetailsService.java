@@ -3,6 +3,8 @@ package blog.service;
 import blog.entities.AjaxResponse;
 import blog.entities.User;
 import blog.mapper.UserMapper;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,34 +13,37 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.Instant;
 import java.util.Collections;
 
 
 @Service
-public class MyUserService implements UserDetailsService {
+@Slf4j
+@Data
+public class MyUserDetailsService implements UserDetailsService {
 
-    final UserMapper userMapper;
+    @Resource
+    private UserMapper userMapper;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    public MyUserService(UserMapper userMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userMapper = userMapper;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    public MyUserDetailsService() {
+        this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
     public User getUserByUserName(String username) {
+        log.info("in method getUserByUserName, username = " + username);
         return userMapper.findUserByUserName(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getUserByUserName(username);
+
         if (user == null) {
             throw new UsernameNotFoundException(username + " 不存在！");
         }
-        return new org.springframework.security.core.userdetails.User(user.getName(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getEncryptedPassword(), Collections.emptyList());
     }
 
@@ -69,11 +74,13 @@ public class MyUserService implements UserDetailsService {
 
     private User UserBuilder(String username, String password) {
         User userNeedToRegister = new User();
-        userNeedToRegister.setName(username);
+        userNeedToRegister.setUsername(username);
         userNeedToRegister.setEncryptedPassword(bCryptPasswordEncoder.encode(password));
         userNeedToRegister.setCreatedAt(Instant.now());
         userNeedToRegister.setUpdatedAt(Instant.now());
         return userNeedToRegister;
     }
 
+    public void setPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+    }
 }

@@ -1,7 +1,7 @@
 package blog.controller;
 
 import blog.entities.AjaxResponse;
-import blog.service.MyUserService;
+import blog.service.MyUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +13,9 @@ import java.util.Map;
 @Slf4j
 @RestController
 public class FindUserController {
-    private final MyUserService userService;
+    private final MyUserDetailsService userService;
 
-    public FindUserController(MyUserService userService) {
+    public FindUserController(MyUserDetailsService userService) {
         this.userService = userService;
     }
 
