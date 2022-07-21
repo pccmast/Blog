@@ -15,6 +15,6 @@
     </select>
     <insert id="registerNewUser" parameterType="blog.entities.User" useGeneratedKeys="true" keyProperty="id">
         insert into users(username, encryptedPassword, createdAt, updatedAt)
-        values (#{name}, #{encryptedPassword}, #{createdAt}, #{updatedAt})
+        values (#{username}, #{encryptedPassword}, #{createdAt}, #{updatedAt})
     </insert>
 </mapper>

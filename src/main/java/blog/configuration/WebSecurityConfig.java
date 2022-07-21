@@ -3,6 +3,7 @@ package blog.configuration;
 import blog.component.CustomUsernamePasswordAuthenticationFilter;
 import blog.component.LoginFailureHandler;
 import blog.component.LoginSuccessHandler;
+import blog.component.CustomLogoutHandler;
 import blog.service.MyUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,9 @@ public class WebSecurityConfig {
     LoginFailureHandler loginFailureHandler;
 
     @Resource
+    CustomLogoutHandler logoutHandler;
+
+    @Resource
     MyUserDetailsService myUserDetailsService;
 
     @Bean
@@ -39,20 +43,16 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/auth/login")
-//                .successHandler(loginSuccessHandler)
-//                .failureHandler(loginFailureHandler)
+                .and()
+                .logout()
+                .logoutUrl("/auth/logout")
+                .addLogoutHandler(logoutHandler)
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .addFilter(customUsernamePasswordAuthenticationFilter());
         return http.build();
     }
 
-    //    @Bean
-//    public AuthenticationManager authenticationManager() {
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-//        return new ProviderManager(daoAuthenticationProvider);
-//    }
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();

@@ -20,17 +20,12 @@ import javax.annotation.Resource;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-public class LoginFailureTest {
+public class LoginTest {
     @Resource
     private MockMvc mockMvc;
 
-    @Resource
-    private MyUserDetailsService myUserDetailsService;
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
     @Test
-    public void login() throws Exception {
+    public void loginSuccessTest() throws Exception {
         String loginJSON = "{\n" +
                 "    \"username\":\"xiaowang\",\n" +
                 "    \"password\":\"11112222\"\n" +
@@ -38,13 +33,6 @@ public class LoginFailureTest {
 
         MvcResult result = mockHttpRequest(loginJSON);
         log.info(result.getResponse().getContentAsString());
-    }
-
-    private void testUserService() throws Exception {
-        String password = myUserDetailsService.getUserByUserName("xiaowang").getEncryptedPassword();
-        log.info("encryptedPassword:" + password);
-        boolean isMatch = bCryptPasswordEncoder.matches("11112222", password);
-        log.info("isMatch:" + isMatch);
     }
 
     @NotNull

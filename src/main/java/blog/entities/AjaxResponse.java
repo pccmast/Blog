@@ -14,6 +14,7 @@ public class AjaxResponse {
      */
     private String status;      // 是否成功
     private String msg;         // 文字信息说明
+
     private Object data;
 
     private AjaxResponse() {
@@ -21,19 +22,17 @@ public class AjaxResponse {
 
     private static AjaxResponse success(String msg, Object urlReturnData) {
         AjaxResponse ajaxResponse = new AjaxResponse();
-
         ajaxResponse.setStatus("ok");
         ajaxResponse.setMsg(msg);
         ajaxResponse.setData(urlReturnData);
         return ajaxResponse;
     }
 
-    public static AjaxResponse registrySuccess(User user) {
-        return AjaxResponse.success("注册成功", user);
-    }
-
-    public static AjaxResponse loginSuccess(Object urlReturnData) {
-        return AjaxResponse.success("登录成功", urlReturnData);
+    private static AjaxResponse success(String msg) {
+        AjaxResponse ajaxResponse = new AjaxResponse();
+        ajaxResponse.setStatus("ok");
+        ajaxResponse.setMsg(msg);
+        return ajaxResponse;
     }
 
     public static AjaxResponse failure(String msg) {
@@ -43,12 +42,35 @@ public class AjaxResponse {
         return ajaxResponse;
     }
 
+    public static AjaxResponse registrySuccess(User user) {
+        return success("注册成功", user);
+    }
+
+    public static AjaxResponse loginSuccess(Object urlReturnData) {
+        return success("登录成功", urlReturnData);
+    }
+
+    public static AjaxResponse haveLogin(Object urlReturnData) {
+        return success("已经登录", urlReturnData);
+    }
+
     public static AjaxResponse loginFailure(String msg) {
-        return AjaxResponse.failure(msg);
+        return failure(msg);
     }
 
     public static AjaxResponse registryFailure() {
-        return AjaxResponse.failure("用户已经存在");
+        return failure("用户已经存在");
     }
 
+    public static AjaxResponse haveNotLogin() {
+        return success("用户没有登陆");
+    }
+
+    public static AjaxResponse logoutSuccess() {
+        return success("注销成功");
+    }
+
+    public static AjaxResponse logoutFailure() {
+        return failure("注销失败");
+    }
 }

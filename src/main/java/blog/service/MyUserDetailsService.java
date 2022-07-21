@@ -5,8 +5,9 @@ import blog.entities.User;
 import blog.mapper.UserMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.Optional;
 
 
 @Service
@@ -32,7 +34,6 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     public User getUserByUserName(String username) {
-        log.info("in method getUserByUserName, username = " + username);
         return userMapper.findUserByUserName(username);
     }
 
@@ -81,6 +82,9 @@ public class MyUserDetailsService implements UserDetailsService {
         return userNeedToRegister;
     }
 
-    public void setPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public Optional<User> checkLoginState() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return Optional.ofNullable(getUserByUserName(authentication == null ? null : authentication.getName()));
+
     }
 }

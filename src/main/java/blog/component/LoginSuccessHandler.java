@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-    private static final ObjectMapper ObjectMapper = JsonMapper.builder()
+    private static final ObjectMapper objectMapper = JsonMapper.builder()
             .findAndAddModules()
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             .build();
@@ -35,7 +35,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setContentType("application/json;charset=UTF-8");
         User principal = (User) authentication.getPrincipal();
         String username = principal.getUsername();
-        response.getWriter().write(ObjectMapper.writeValueAsString(
+        response.getWriter().write(objectMapper.writeValueAsString(
                 AjaxResponse.loginSuccess(userMapper.findUserByUserName(username))));
     }
 }
