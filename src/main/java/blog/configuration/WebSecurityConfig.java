@@ -1,9 +1,9 @@
 package blog.configuration;
 
+import blog.component.CustomLogoutSuccessHandler;
 import blog.component.CustomUsernamePasswordAuthenticationFilter;
 import blog.component.LoginFailureHandler;
 import blog.component.LoginSuccessHandler;
-import blog.component.CustomLogoutHandler;
 import blog.service.MyUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import javax.annotation.Resource;
 
@@ -29,7 +31,7 @@ public class WebSecurityConfig {
     LoginFailureHandler loginFailureHandler;
 
     @Resource
-    CustomLogoutHandler logoutHandler;
+    CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Resource
     MyUserDetailsService myUserDetailsService;
@@ -39,17 +41,20 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**", "/auth/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/auth/login")
                 .and()
                 .logout()
                 .logoutUrl("/auth/logout")
-                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler(customLogoutSuccessHandler)
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
-                .addFilter(customUsernamePasswordAuthenticationFilter());
+                .addFilter(customUsernamePasswordAuthenticationFilter())
+                .headers()
+                .contentTypeOptions()
+                .disable();
         return http.build();
     }
 
@@ -72,5 +77,12 @@ public class WebSecurityConfig {
         filter.setFilterProcessesUrl("/auth/login");
         filter.setAuthenticationManager(new ProviderManager(daoAuthenticationProvider()));
         return filter;
+    }
+
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedDoubleSlash(true);
+        return firewall;
     }
 }
