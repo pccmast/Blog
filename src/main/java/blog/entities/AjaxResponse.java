@@ -51,7 +51,7 @@ public class AjaxResponse {
     }
 
     public static AjaxResponse haveLogin(Object urlReturnData) {
-        return success("已经登录", urlReturnData);
+        return success("用户已经登录", urlReturnData);
     }
 
     public static AjaxResponse loginFailure(String msg) {
