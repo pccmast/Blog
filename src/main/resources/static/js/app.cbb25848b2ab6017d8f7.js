@@ -52,7 +52,7 @@ webpackJsonp([10], {
                 return this._m(0)
             }, staticRenderFns: [function () {
                 var e = this.$createElement, t = this._self._c || e;
-                return t("footer", [t("p", [this._v("© xiedaimala.com 2020 wechat: xiedaimala03")])])
+                return t("footer", [t("p", [this._v("© 啊吧啊吧")])])
             }]
         };
         var g = {

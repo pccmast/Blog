@@ -5,6 +5,7 @@ import blog.entities.User;
 import blog.mapper.UserMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -60,25 +61,26 @@ public class MyUserDetailsService implements UserDetailsService {
             return AjaxResponse.failure("invalid password");
         }
 
-        User userNeedToRegister = UserBuilder(username, password);
+        User userNeedToRegister = userBuilder(username, password);
 
         try {
             Integer id = userMapper.registerNewUser(userNeedToRegister);
             userNeedToRegister.setId(id);
             return AjaxResponse.registrySuccess(userNeedToRegister);
         } catch (DuplicateKeyException e) {
-            return AjaxResponse.registryFailure();
+            return AjaxResponse.registryFailure(e.getMessage());
         }
-        // 登录
-
     }
 
-    private User UserBuilder(String username, String password) {
+    public User userBuilder(String username, String password) {
         User userNeedToRegister = new User();
         userNeedToRegister.setUsername(username);
         userNeedToRegister.setEncryptedPassword(bCryptPasswordEncoder.encode(password));
         userNeedToRegister.setCreatedAt(Instant.now());
         userNeedToRegister.setUpdatedAt(Instant.now());
+        String seed = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+        String avatar = "https://api.multiavatar.com/" + seed + ".svg";
+        userNeedToRegister.setAvatar(avatar);
         return userNeedToRegister;
     }
 

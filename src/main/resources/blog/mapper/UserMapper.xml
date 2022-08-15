@@ -14,7 +14,7 @@
         where username = #{name}
     </select>
     <insert id="registerNewUser" parameterType="blog.entities.User" useGeneratedKeys="true" keyProperty="id">
-        insert into users(username, encryptedPassword, createdAt, updatedAt)
-        values (#{username}, #{encryptedPassword}, #{createdAt}, #{updatedAt})
+        insert into users(username, encryptedPassword, createdAt, updatedAt, avatar)
+        values (#{username}, #{encryptedPassword}, #{createdAt}, #{updatedAt}, #{avatar})
     </insert>
 </mapper>

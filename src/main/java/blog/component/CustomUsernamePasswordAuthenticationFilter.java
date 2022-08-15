@@ -2,10 +2,13 @@ package blog.component;
 
 import blog.entities.UsernamePassword;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +23,6 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         //use jackson to deserialize json
         ObjectMapper mapper = new ObjectMapper();
         UsernamePasswordAuthenticationToken authRequest;
-
         try (InputStream is = request.getInputStream()) {
             UsernamePassword authenticationBean = mapper.readValue(is, UsernamePassword.class);
             authRequest = new UsernamePasswordAuthenticationToken(authenticationBean.getUsername(),
@@ -29,7 +31,8 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
             e.printStackTrace();
             authRequest = new UsernamePasswordAuthenticationToken("", "");
         }
-        setDetails(request, authRequest);
+        super.setDetails(request, authRequest);
+        SecurityContextHolder.getContext().setAuthentication(authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 }
