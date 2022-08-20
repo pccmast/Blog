@@ -19,5 +19,5 @@ public interface BlogMapper {
 
     void deleteBlog(Integer id);
 
-    Integer countBlog();
+    Integer countBlog(String userId, Boolean atIndex);
 }

@@ -30,7 +30,16 @@
 
     <select id="countBlog" resultType="Integer">
         select count(*)
-        from blog
+        from blog left join users
+        on blog.user_id = users.id
+        <where>
+            <if test="userId != null">
+                blog.user_id = #{userId}
+            </if>
+            <if test="atIndex != null">
+                and blog.atIndex = #{atIndex}
+            </if>
+        </where>
     </select>
 
     <insert id="createNewBlog" parameterType="blog.entities.Blog">

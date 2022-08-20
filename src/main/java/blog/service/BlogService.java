@@ -31,15 +31,15 @@ public class BlogService {
             Integer pageStartIndex = (page - 1) * blogEachPage;
             blogItemList = blogMapper.getBlogList(pageStartIndex, userId, atIndex);
 
-            Integer blogNum = blogMapper.countBlog();
+            int totalNum = blogMapper.countBlog(userId, atIndex);
 
             AjaxResponse ajaxResponse = AjaxResponse.getBlogListSuccess(blogItemList);
 
-            Integer totalPages = (blogNum % 10 == 0) ? (blogNum / 10) : (blogNum / 10 + 1);
+            Integer totalPages = (totalNum % 10 == 0) ? (totalNum / 10) : (totalNum / 10 + 1);
 
             ajaxResponse.setTotalPage(totalPages);
             ajaxResponse.setPage(page);
-            ajaxResponse.setTotal(blogNum);
+            ajaxResponse.setTotal(totalNum);
 
             return ajaxResponse;
         } catch (Exception e) {
