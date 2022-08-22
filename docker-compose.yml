@@ -1,0 +1,25 @@
+version: "2.4"
+
+services:
+  webapp:
+    image: openjdk:11-jre-slim
+    ports:
+      - "8088:8088"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-for-blog
+    restart: always
+    ports:
+      - "33306:3306"
+    environment:
+      - MYSQL_ROOT_BASE:blogdata
+      - MYSQL_ROOT_PASSWORD=lzp123456
+      - TZ=Asia/Shanghai
+    volumes:
+      - /app/mysql/datadir:/var/lib/mysql
+
+
+
