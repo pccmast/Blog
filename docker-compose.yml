@@ -2,22 +2,24 @@ version: "2.4"
 
 services:
   webapp:
-    image: openjdk:11-jre-slim
+    image: blog:1.0
+    build: .
     ports:
-      - "8088:8088"
+      - "8808:8808"
     depends_on:
       - mysql
 
   mysql:
     image: mysql:latest
-    container_name: mysql-for-blog
+    container_name: mysql-for-spring-blog
     restart: always
+    security_opt:
+      - seccomp:unconfined
     ports:
       - "33306:3306"
     environment:
-      - MYSQL_ROOT_BASE:blogdata
-      - MYSQL_ROOT_PASSWORD=lzp123456
-      - TZ=Asia/Shanghai
+      - "MYSQL_ROOT_PASSWORD=lzp123456"
+      - "MYSQL_DATABASE=blogdata"
     volumes:
       - /app/mysql/datadir:/var/lib/mysql
 
