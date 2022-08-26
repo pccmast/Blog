@@ -1,3 +1,5 @@
+Create Database If Not Exists blogdata Character Set UTF8MB4;
+
 use blogdata;
 
 create table users

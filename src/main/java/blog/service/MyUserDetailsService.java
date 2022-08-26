@@ -64,8 +64,7 @@ public class MyUserDetailsService implements UserDetailsService {
         User userNeedToRegister = userBuilder(username, password);
 
         try {
-            Integer id = userMapper.registerNewUser(userNeedToRegister);
-            userNeedToRegister.setId(id);
+            userMapper.registerNewUser(userNeedToRegister);
             return AjaxResponse.registrySuccess(userNeedToRegister);
         } catch (DuplicateKeyException e) {
             return AjaxResponse.registryFailure(e.getMessage());
