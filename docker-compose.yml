@@ -20,9 +20,6 @@ services:
       - "MYSQL_DATABASE=blogdata"
     volumes:
       - /app/mysql/datadir:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
 
 
 
