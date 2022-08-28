@@ -7,9 +7,6 @@ services:
     build: .
     ports:
       - "8808:8808"
-    networks:
-      blog:
-        ipv4_address: 172.22.0.2               #容器固定ip
 
   blog_mysql:
     container_name: blog_mysql
@@ -18,28 +15,13 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     security_opt:
       - seccomp:unconfined
-    ports:
-      - "3306:3306"
     environment:
       - "MYSQL_ROOT_PASSWORD=lzp123456"
       - "MYSQL_DATABASE=blogdata"
     volumes:
       - /app/mysql/datadir:/var/lib/mysql
-    networks:
-      blog:
-        ipv4_address: 172.22.0.3               #容器固定ip
-
-
-networks:
-  blog:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.22.0.0/16
-          gateway: 172.22.0.1
-
-
+    ports:
+      - "3306:3306"
 
 
 
