@@ -147,7 +147,7 @@
                 <version>6.1.1</version>
                 <configuration>
                     <url>
-                        jdbc:mysql://blog_mysql:3306/blogdata?serverTimezone=UTC&amp;characterEncoding=utf-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true
+                        jdbc:mysql://127.0.0.1:3306/blogdata?serverTimezone=UTC&amp;characterEncoding=utf-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true
                     </url>
                     <user>root</user>
                     <password>lzp123456</password>
